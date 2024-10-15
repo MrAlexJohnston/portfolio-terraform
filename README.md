@@ -93,3 +93,4 @@ Type yes to confirm the destroy action.
 
 - Add autoscaling for the ECS service based on CPU or memory utilization.
 - Implement HTTPS with SSL termination on the Application Load Balancer.
+- Move state to S3 / DynamoDB
