@@ -1,6 +1,6 @@
 
 # Create a VPC
-resource "aws_vpc" "example_vpc" {
+resource "aws_vpc" "terraform_vpc" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
@@ -11,7 +11,7 @@ resource "aws_vpc" "example_vpc" {
 
 # Create an Internet Gateway for Public Subnet Internet Access
 resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.example_vpc.id
+  vpc_id = aws_vpc.terraform_vpc.id
   tags = {
     Name = "InternetGateway"
   }
@@ -20,8 +20,8 @@ resource "aws_internet_gateway" "igw" {
 # Create public subnets
 resource "aws_subnet" "public_subnet" {
   count = 3
-  vpc_id            = aws_vpc.example_vpc.id
-  cidr_block        = cidrsubnet(aws_vpc.example_vpc.cidr_block, 8, count.index)
+  vpc_id            = aws_vpc.terraform_vpc.id
+  cidr_block        = cidrsubnet(aws_vpc.terraform_vpc.cidr_block, 8, count.index)
   availability_zone = element(["eu-west-2a", "eu-west-2b", "eu-west-2c"], count.index)
   map_public_ip_on_launch = true
   tags = {
@@ -32,8 +32,8 @@ resource "aws_subnet" "public_subnet" {
 # Create private subnets
 resource "aws_subnet" "private_subnet" {
   count = 3
-  vpc_id            = aws_vpc.example_vpc.id
-  cidr_block        = cidrsubnet(aws_vpc.example_vpc.cidr_block, 8, count.index + 3)
+  vpc_id            = aws_vpc.terraform_vpc.id
+  cidr_block        = cidrsubnet(aws_vpc.terraform_vpc.cidr_block, 8, count.index + 3)
   availability_zone = element(["eu-west-2a", "eu-west-2b", "eu-west-2c"], count.index)
   tags = {
     Name = "PrivateSubnet-${count.index + 1}"
@@ -56,7 +56,7 @@ resource "aws_nat_gateway" "nat_gw" {
 
 # Route Table for Public Subnets (to access the Internet)
 resource "aws_route_table" "public_rt" {
-  vpc_id = aws_vpc.example_vpc.id
+  vpc_id = aws_vpc.terraform_vpc.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.igw.id
@@ -75,7 +75,7 @@ resource "aws_route_table_association" "public_association" {
 
 # Route Table for Private Subnets (to route traffic via NAT Gateway)
 resource "aws_route_table" "private_rt" {
-  vpc_id = aws_vpc.example_vpc.id
+  vpc_id = aws_vpc.terraform_vpc.id
   route {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.nat_gw.id
@@ -94,7 +94,7 @@ resource "aws_route_table_association" "private_association" {
 
 # Create a security group for Lambda
 resource "aws_security_group" "lambda_security_group" {
-  vpc_id = aws_vpc.example_vpc.id
+  vpc_id = aws_vpc.terraform_vpc.id
   description = "Allow Lambda to access resources in the VPC"
   egress {
     from_port   = 0
@@ -110,7 +110,7 @@ resource "aws_security_group" "lambda_security_group" {
 # Outputs
 output "vpc_id" {
   description = "VPC ID"
-  value       = aws_vpc.example_vpc.id
+  value       = aws_vpc.terraform_vpc.id
 }
 
 output "public_subnet_ids" {

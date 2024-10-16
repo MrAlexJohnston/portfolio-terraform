@@ -56,7 +56,7 @@ resource "aws_ecs_task_definition" "nginx_task" {
 
 # Security Group for ECS NGINX Fargate Service
 resource "aws_security_group" "nginx_sg" {
-  vpc_id = aws_vpc.example_vpc.id  # Linking to the VPC created in vpc.tf
+  vpc_id = aws_vpc.terraform_vpc.id  # Linking to the VPC created in vpc.tf
 
   ingress {
     from_port   = 80
@@ -103,7 +103,7 @@ resource "aws_lb_target_group" "nginx_tg" {
   name     = "nginx-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = aws_vpc.example_vpc.id
+  vpc_id   = aws_vpc.terraform_vpc.id
   target_type = "ip"
 
   health_check {
