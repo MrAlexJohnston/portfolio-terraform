@@ -114,16 +114,16 @@ output "vpc_id" {
 }
 
 output "public_subnet_ids" {
-  description = "Comma-separated list of Public Subnet IDs"
-  value       = join(",", aws_subnet.public_subnet[*].id)
+  description = "Array of public subnets"
+  value       = aws_subnet.public_subnet[*].id
 }
 
 output "private_subnet_ids" {
-  description = "Comma-separated list of Private Subnet IDs"
-  value       = join(",", aws_subnet.private_subnet[*].id)
+  description = "Array of private subnets"
+  value       = aws_subnet.private_subnet[*].id
 }
 
 output "lambda_security_group_id" {
-  description = "The Security Group ID for the Lambda function"
+  description = "Security Group ID for the Lambda function"
   value       = aws_security_group.lambda_security_group.id
 }

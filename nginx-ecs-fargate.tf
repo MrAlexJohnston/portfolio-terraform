@@ -56,7 +56,7 @@ resource "aws_ecs_task_definition" "nginx_task" {
 
 # Security Group for ECS NGINX Fargate Service
 resource "aws_security_group" "nginx_sg" {
-  vpc_id = aws_vpc.terraform_vpc.id  # Linking to the VPC created in vpc.tf
+  vpc_id = aws_vpc.terraform_vpc.id
 
   ingress {
     from_port   = 80
@@ -83,7 +83,7 @@ resource "aws_lb" "nginx_lb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.nginx_sg.id]
-  subnets            = aws_subnet.public_subnet[*].id  # Public subnets from vpc.tf
+  subnets            = aws_subnet.public_subnet[*].id
 }
 
 # Listener for Application Load Balancer
@@ -129,9 +129,9 @@ resource "aws_ecs_service" "nginx_service" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets          = aws_subnet.private_subnet[*].id  # Use private subnets for ECS tasks
+    subnets          = aws_subnet.private_subnet[*].id
     security_groups  = [aws_security_group.nginx_sg.id]
-    assign_public_ip = false  # Do not assign public IPs to tasks in private subnets
+    assign_public_ip = false
   }
 
   load_balancer {
