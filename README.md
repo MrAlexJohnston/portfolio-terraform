@@ -2,6 +2,8 @@
 
 This project deploys a fully functional ECS Fargate service running NGINX, using a VPC with public and private subnets. The NGINX service is placed in private subnets behind an Application Load Balancer (ALB) for routing traffic, and the infrastructure is managed using Terraform.
 
+Additionally, the project includes an AWS SAM pipeline that creates an API Gateway and Lambda functions. The API Gateway routes HTTP requests to Lambda functions deployed within private subnets, ensuring secure execution of serverless functions within the VPC. The SAM pipeline automates the deployment of the API Gateway and Lambdas, leveraging CodePipeline for continuous integration and deployment.
+
 ## Prerequisites
 
 - Terraform installed (version >= 1.0.0)
@@ -10,10 +12,11 @@ This project deploys a fully functional ECS Fargate service running NGINX, using
 
 ## Project Structure
 
-This project is split into two Terraform files for easier management:
+This project is split into three Terraform files for easier management:
 
 1. **vpc.tf**: Contains the configuration for setting up the VPC, subnets (public and private), Internet Gateway, NAT Gateway, and route tables.
 2. **nginx-ecs-fargate.tf**: Contains the ECS cluster, task definition, security groups, Fargate service, and Application Load Balancer configuration.
+3. **aws-sam-pipeline.tf**: Sets up a CodePipeline for AWS SAM applications, using CodeStar for source control integration.
 
 ### Key Components
 
@@ -26,6 +29,11 @@ This project is split into two Terraform files for easier management:
   - **Security Groups**: Control access to the ECS tasks and ALB.
   
 - **Application Load Balancer (ALB)**: Routes external traffic to the NGINX service running in the private subnets.
+
+- **AWS SAM Pipeline**: Automates the deployment of AWS SAM applications using a CodePipeline.
+  - **S3 Artifact Bucket**: Stores build artifacts.
+  - **IAM Roles and Policies**: Roles for CodePipeline and CloudFormation with necessary permissions.
+  - **CodePipeline**: Fetches source code from CodeStar, packages the SAM application, and deploys it using CloudFormation.
 
 ## How to Deploy
 
