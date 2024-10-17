@@ -167,11 +167,10 @@ resource "aws_codebuild_project" "build_project" {
   source {
     type            = "GITHUB"
     location        = "https://github.com/MrAlexJohnston/portfolio-aws-sam"
-    buildspec       = "buildspec.yml"  # Define the buildspec file location
+    buildspec       = "buildspec.yml"
     git_clone_depth = 1
   }
 
-  # Define where the build artifacts should be stored (e.g., S3 bucket)
   artifacts {
     type = "S3"
     location = aws_s3_bucket.artifact_bucket.bucket
