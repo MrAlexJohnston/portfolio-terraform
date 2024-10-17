@@ -67,9 +67,13 @@ resource "aws_iam_role_policy" "cf_role_policy" {
     Version = "2012-10-17",
     Statement = [{
       Action   = [
-        "iam:PassRole",
+        "iam:*",
         "s3:*",
         "cloudformation:*",
+        "dynamodb:*",
+        "lambda:*",
+        "ec2:*",
+        "apigateway:*",
       ]
       Effect   = "Allow"
       Resource = "*"
@@ -131,9 +135,9 @@ resource "aws_codepipeline" "my_pipeline" {
         ActionMode          = "CREATE_UPDATE"
         RoleArn             = aws_iam_role.cf_role.arn
         ParameterOverrides  = jsonencode({
-          SubnetId1       = aws_subnet.public_subnet[0].id
-          SubnetId2       = aws_subnet.public_subnet[1].id
-          SubnetId3       = aws_subnet.public_subnet[2].id
+          SubnetId1       = aws_subnet.private_subnet[0].id
+          SubnetId2       = aws_subnet.private_subnet[1].id
+          SubnetId3       = aws_subnet.private_subnet[2].id
           SecurityGroupId = aws_security_group.lambda_security_group.id
         })
       }
