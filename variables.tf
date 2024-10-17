@@ -13,3 +13,8 @@ variable "vpc_name" {
   type          = string
   default       = "TerraformVPC"
 }
+
+variable "codestar_connection_arn" {
+  description = "ARN for the AWS CodeStar connection"
+  type        = string
+}

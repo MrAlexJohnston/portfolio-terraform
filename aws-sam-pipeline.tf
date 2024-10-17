@@ -39,7 +39,7 @@ resource "aws_iam_role_policy" "pipeline_policy" {
       {
         Effect   = "Allow",
         Action   = "codestar-connections:UseConnection",
-        Resource = "arn:aws:codestar-connections:eu-west-2:769355695078:connection/1be98307-7c50-4389-9fa9-1117620d535c"
+        Resource = var.codestar_connection_arn
       }
     ]
   })
